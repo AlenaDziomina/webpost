@@ -1,24 +1,36 @@
 package com.grouk.webpost;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-import com.grouk.webpost.util.CsControl;
+import com.grouk.webpost.controler.TrackController;
 import com.grouk.webpost.util.SceneLoader;
+
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 /**
  * Main application class
  * Created by Alena_Grouk on 3/29/2017.
  */
+@Configuration
+@ComponentScan("com.grouk.webpost")
+@PropertySource("classpath:application.properties")
 public class Main extends Application {
     private Logger LOGGER = LoggerFactory.getLogger(Main.class);
-    private final static String MAIN_FXML = "/fxml/main.fxml";
-    private final static String RESOURCE_NAME = "uiResource";
+
+    private static ApplicationContext appContext;
 
     public static void main(String[] args) {
         launch(args);
@@ -27,10 +39,33 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         LOGGER.info("Start application.");
-        URL source = getClass().getResource(MAIN_FXML);
-        ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_NAME, CsControl.Cp1251);
-        String title = resourceBundle.getString("main.title");
 
-        SceneLoader.loadScene(source, primaryStage, title, resourceBundle);
+        appContext = new AnnotationConfigApplicationContext(Main.class);
+        String name = appContext.getEnvironment().getProperty("application.name");
+        String version = appContext.getEnvironment().getProperty("application.version");
+        LOGGER.info(String.format("%s %s started", name, version));
+
+        TrackController trackController = appContext.getBean(TrackController.class);
+        SceneLoader.loadScene(primaryStage, trackController);
+    }
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    @Bean
+    public static JdbcTemplate jdbcTemplate() {
+        return new JdbcTemplate(getDataSource());
+    }
+
+    @Bean
+    public static DataSource getDataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        String dbUrl = appContext.getEnvironment().getProperty("db.url");
+        String driver = appContext.getEnvironment().getProperty("db.driver");
+        dataSource.setDriverClassName(driver);
+        dataSource.setUrl(dbUrl);
+        return dataSource;
     }
 }
