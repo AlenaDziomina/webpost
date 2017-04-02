@@ -3,6 +3,8 @@ package com.grouk.webpost.manager;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.grouk.webpost.model.TrackInfo;
+import com.grouk.webpost.view.TrackInfoDataModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -41,8 +43,9 @@ public class TrackManager {
         trackService.deleteTrack(trackNumber.getId());
     }
 
-    public void getTrackInfo(TrackTableDataModel trackNumber) {
-        trackInfoService.getTrackInfo(trackNumber.getNumber());
+    public List<TrackInfoDataModel> getTrackInfo(TrackTableDataModel trackNumber) {
+        List<TrackInfo> trackInfoList = trackInfoService.getTrackInfo(trackNumber.getNumber());
+        return trackInfoList.stream().map(TrackInfoDataModel::new).collect(Collectors.toList());
     }
 
 }

@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
@@ -20,15 +20,27 @@
       </HBox>
    </top>
    <left>
-      <TableView fx:id="trackList" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="trackList" onMouseClicked="#onTrackTableClick" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <columns>
-            <TableColumn fx:id="description" prefWidth="75.0" text="id" visible="false" />
-          <TableColumn fx:id="idTrack" prefWidth="100.0" text="Track Number" />
-          <TableColumn fx:id="number" prefWidth="100.0" text="Description" />
+            <TableColumn fx:id="idTrack" prefWidth="75.0" text="id" visible="false" />
+          <TableColumn fx:id="number" prefWidth="100.0" text="Track Number" />
+          <TableColumn fx:id="description" prefWidth="100.0" text="Description" />
         </columns>
          <BorderPane.margin>
             <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
          </BorderPane.margin>
       </TableView>
    </left>
+   <center>
+      <TableView fx:id="trackInfo" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="dataInfo" prefWidth="75.0" text="C1" />
+          <TableColumn fx:id="eventInfo" prefWidth="220.0" text="C2" />
+            <TableColumn fx:id="officeInfo" prefWidth="75.0" text="C3" />
+        </columns>
+         <BorderPane.margin>
+            <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+         </BorderPane.margin>
+      </TableView>
+   </center>
 </BorderPane>

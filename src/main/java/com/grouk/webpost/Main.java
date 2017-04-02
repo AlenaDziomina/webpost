@@ -4,6 +4,7 @@ import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -30,6 +31,12 @@ import javafx.stage.Stage;
 public class Main extends Application {
     private Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
+    @Value("${db.url}")
+    private String dbUrl;
+
+    @Value("${db.driver}")
+    private String driver;
+
     private static ApplicationContext appContext;
 
     public static void main(String[] args) {
@@ -55,15 +62,13 @@ public class Main extends Application {
     }
 
     @Bean
-    public static JdbcTemplate jdbcTemplate() {
+    public JdbcTemplate jdbcTemplate() {
         return new JdbcTemplate(getDataSource());
     }
 
     @Bean
-    public static DataSource getDataSource() {
+    public DataSource getDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        String dbUrl = appContext.getEnvironment().getProperty("db.url");
-        String driver = appContext.getEnvironment().getProperty("db.driver");
         dataSource.setDriverClassName(driver);
         dataSource.setUrl(dbUrl);
         return dataSource;
