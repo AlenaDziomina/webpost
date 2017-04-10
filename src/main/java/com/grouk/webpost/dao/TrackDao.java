@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.grouk.webpost.model.Track;
 
 /**
+ * Track DAO
  * Created by Alena_Grouk on 3/29/2017.
  */
 @Component
@@ -28,6 +29,7 @@ public class TrackDao {
             track.setId(rs.getInt("id"));
             track.setNumber(rs.getString("number"));
             track.setDescription(rs.getString("description"));
+            track.setImage(rs.getBytes("image"));
             return track;
         });
     }
